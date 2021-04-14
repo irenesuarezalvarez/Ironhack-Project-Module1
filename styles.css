@@ -1,0 +1,23 @@
+.main-div{
+background-image: url(./images/background.jpg);
+background-repeat: no-repeat;
+background-size: contain;
+height: 2100px;
+
+display:flex;
+justify-content: center;
+
+}
+
+
+canvas{
+    background-color: white;
+    width:900px;
+    height: 400px;
+}
+
+#btn-start{
+    width:7rem;
+    height: 1.5rem;
+
+}
