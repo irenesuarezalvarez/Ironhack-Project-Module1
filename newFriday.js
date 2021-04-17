@@ -1,11 +1,15 @@
+const secondDiv = document.getElementById('second-div');
+const scoreDiv = document.getElementById('score-div');
 const btnStart = document.getElementById('btn-start');
 const canvas = document.createElement('canvas');
-
 const ctx = canvas.getContext('2d');
-let frames = 0;
-const enemies = []
+
 canvas.width = window.innerWidth / 100 * 80;
 canvas.height = window.innerHeight / 100 * 80;
+
+let frames = 0;
+let raf;
+const enemies = []
 
 const background = new Image();
 background.src = "./images/descarga.jfif";
@@ -23,19 +27,18 @@ btnStart.addEventListener('click', startGame);
 function startGame(){
     const maindiv = document.getElementById('main-div');
     maindiv.insertBefore(canvas, maindiv.childNodes[0]);
-    btnStart.style.display = "none";
+    secondDiv.style.display = "none";
     updateCanvas()  
 }
 
-//Function re-print CanvasTODO Fix enemies
+//Function re-print Canvas
 function updateCanvas(){
-    requestAnimationFrame(updateCanvas)
+    raf = requestAnimationFrame(updateCanvas)
     frames +=1;
     draw(background, 0, 0, canvas.width, canvas.height)
     draw(player1, player.x, player.y, player.width, player.height)
-    console.log(enemies.length)
+    
     const randomInt = chooseRandom(80, 120)
-
     if(frames % randomInt === 0) {
         spawnEnemies()
     }
@@ -43,7 +46,9 @@ function updateCanvas(){
     enemies.forEach((enemy)=>{
         enemy.update()
     }) 
-    
+
+    checkGameOver()
+    score()
 }
 
 
@@ -87,6 +92,7 @@ class Enemy{
     update(){
         this.draw()
         this.x += 1
+
         /* this.x = this.x + this.velocity.x;
         this.y = this.y +this.velocity.y */
     }
@@ -99,17 +105,16 @@ function spawnEnemies(){
         const y = chooseRandom(0, canvas.height);
         const w = 60;
         const h = 40;
-        const velocity = {
+        const velocity = 1 /* {
             x:1,
             y:1
-        }
+        } */
         enemies.push(new Enemy(arrEnemy, x, y, w, h, velocity))
  
 }
 
 
 //Move Player
-
 document.addEventListener('keydown', movePlayer) 
 function movePlayer (e) {
   switch (e.keyCode) {
@@ -126,6 +131,36 @@ function movePlayer (e) {
         player.x += player.speed;
         break;
   }
-  updateCanvas();
 };
 
+function checkCrash(enemy){
+    console.log('youre inside checkcrash')
+    return !((player.y + player.height) < enemy.y || player.y > (enemy.y + enemy.h)|| (player.x + player.width) < enemy.x || player.x > (enemy.x + enemy.w));
+} 
+
+function checkGameOver() {
+    const crashed = enemies.some(function (enemy) {
+    return checkCrash(enemy);
+    });
+   
+    if (crashed) {
+        console.log('craashed')
+        stopGame();
+    }
+}
+function stopGame(){
+    cancelAnimationFrame(raf);
+    secondDiv.style.display = "flex";
+    scoreDiv.style.display = "flex";
+
+}
+
+
+function score(){
+
+    const points = Math.floor(frames / 50);
+    ctx.font = '18px serif';
+    ctx.fillStyle = 'black';
+    ctx.fillText(`Score: ${points}`, (canvas.width - 100), 50);
+      
+}
