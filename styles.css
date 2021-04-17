@@ -16,7 +16,7 @@ height: calc(100% - 3rem);
 padding: 1.5rem;
 }
 
-.second-div{
+.score-div{
     background-color: white;
     color: black;
     border-radius: 5px;
@@ -48,13 +48,12 @@ canvas{
     width: 900px; */
 }
 
-#btn-start{
+.btn{
     background-color: rgba(108, 211, 243, 0.13);
     padding: 1rem;
     border-radius: 5px;
     box-shadow: 10px 10px 8px #888888;
     margin: 2px;
-
 }
 
 #btn-start:hover{
