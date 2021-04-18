@@ -2,6 +2,9 @@ const scoreDiv = document.getElementById('score-div');
 const showPoints = document.getElementById('points');
 const btnRstart = document.getElementById('btn-rstart')
 const btnStart = document.getElementById('btn-start');
+const btnMute = document.getElementById('btn-mute');
+const imgMute = document.getElementById('img-mute');
+
 
 const canvas = document.createElement('canvas');
 const ctx = canvas.getContext('2d');
@@ -12,6 +15,12 @@ canvas.height = window.innerHeight / 100 * 80;
 let frames = 0;
 let raf;
 let enemies = []
+
+let crashSound;
+crashSound = new Sound("./sounds/hit.mp3");
+
+let bgMusic;
+bgMusic = new Sound("./sounds/bgmusic.mp3")
 
 const background = new Image();
 background.src = "./images/descarga.jfif";
@@ -25,9 +34,11 @@ arrEnemy.src = "./images/arrow.png";
 
 btnStart.addEventListener('click', startGame);
 btnRstart.addEventListener('click', reStartGame);
+btnMute.addEventListener('click', stopSounds);
+
 
 //Sounds
-function sound(src) {
+function Sound(src) {
     this.sound = document.createElement("audio");
     this.sound.src = src;
     this.sound.setAttribute("preload", "auto");
@@ -48,12 +59,16 @@ function startGame(){
     maindiv.insertBefore(canvas, maindiv.childNodes[0]);
     scoreDiv.style.display = "none";
     btnStart.style.display = "none";
+    btnMute.style.display = "block";
+    bgMusic.play()
     updateCanvas()  
 }
 
 function reStartGame(){ 
     scoreDiv.style.display = "none";
     btnStart.style.display = "none";
+    btnMute.style.display = "block";
+    bgMusic.play()
     enemies = []
     frames = 0
     player.x = canvas.width/2,
@@ -61,6 +76,13 @@ function reStartGame(){
     updateCanvas()  
 }
 
+//Stop sounds
+
+function stopSounds(){
+    bgMusic.stop()
+    crashSound.stop()
+    imgMute.src='./images/off-mute.png';
+}
 //Function re-print Canvas
 function updateCanvas(){
     raf = requestAnimationFrame(updateCanvas)
@@ -142,8 +164,6 @@ function spawnEnemies(){
         enemies.push(new Enemy(arrEnemy, x, y, w, h, velocity))
  
 }
-let mySound;
-mySound = new sound("./sounds/hit.mp3");
 
 
 //Move Player
@@ -176,7 +196,8 @@ function checkGameOver() {
     });
    
     if (crashed) {
-        mySound.play();
+        bgMusic.stop()
+        crashSound.play();
         stopGame();
     }
 }

@@ -40,24 +40,49 @@ padding: 1.5rem;
     margin: 1rem;
 }
 
+.btn-mute{
+    border-radius: 100px;
+    height: 2rem;
+    width: 2rem;
+    padding: 0;
+    border: none;
+    cursor: pointer;
+    position: absolute;
+    top: 10%;
+    right: 4%;
+}
+
+#btn-mute{
+    display: none;
+}
+
+#img-mute{
+    top: 0;
+    right: 0;
+}
+
+#btn-mute:hover{
+    box-shadow: 10px 10px 8px #888888;
+}
 
 canvas{
     background-color: white;
     border-radius: 25px;
-   /*  height: 500px;
-    width: 900px; */
+
 }
 
 .btn{
     background-color: rgba(108, 211, 243, 0.13);
     padding: 1rem;
     border-radius: 5px;
-    box-shadow: 10px 10px 8px #888888;
+   
     margin: 2px;
+    cursor: pointer;
 }
 
 #btn-start:hover{
     color: white;
     background-color: rgb(71, 136, 156);
+    box-shadow: 10px 10px 8px #888888;
 }
 
