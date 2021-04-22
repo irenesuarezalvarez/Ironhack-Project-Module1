@@ -7,6 +7,7 @@ const btnStart = document.getElementById('btn-start');
 const btnMute = document.getElementById('btn-mute');
 const imgMute = document.getElementById('img-mute');
 
+
 //TODO: fix in files
 //Music button + re-start form 0
 //Objts tardan mucho en salir
@@ -40,13 +41,10 @@ let crashSound;
 crashSound = new Sound("./sounds/hit.mp3");
 
 let gameOverSound;
-gameOver = new Sound("./sounds/gameOver.mp3");
+gameOverSound = new Sound("./sounds/gameOver.mp3");
 
 let victorySound;
 victorySound = new Sound("./sounds/victory.mp3");
-
-let girlPziferSound;
-girlPzifer = new Sound("./sounds/girlPzifer.mp3");
 
 let bgMusic;
 bgMusic = new Sound("./sounds/myCorona.mp3");
@@ -89,7 +87,10 @@ function startGame(){
 }
 
 function reStartGame(){ 
+    timeDiv.style.display = "none";
+    livesDiv.style.display = "none";
     scoreDiv.style.display = "none";
+    showPoints.style.display = "none";
     btnStart.style.display = "none";
     btnMute.style.display = "block";
     bgMusic.play()
@@ -120,15 +121,11 @@ function updateCanvas(){
     drawMain(player1, player.width * player.frameX, player.height * player.frameY, player.width, player.height, player.x, player.y, player.width, player.height)
     //playerWalking()
 
-    const randomInt = chooseRandom(80, 120)
+    const randomInt = chooseRandom(95, 100)
     if(frames % randomInt === 0) {
         spawnEnemies()
     }
 
-  /*   if(frames % randomInt === 0) {
-        spawnEnemiesRight()
-    }
-*/
     if(frames % randomInt === 0) {
         spawnPrizes()
     } 
@@ -142,9 +139,7 @@ function updateCanvas(){
                     enemies.splice(idx, 1);
                     lives -= 1;
                 }else{
-                    livesDiv.style.display = "block";
-                    stopGame();
-                    youLose()
+                    checkLose()
                 }
                 
             }
@@ -350,33 +345,36 @@ function score(){
 function stopGame(){
     stopTimer()
     cancelAnimationFrame(raf);
-    scoreDiv.style.display = "flex";
     bgMusic.stop()
-    
 }
 
 function checkGameWin(){
     printScore()
     if(points >= 100){
         stopGame()
+        scoreDiv.style.display = "flex";
+        btnRstart.style.display = "block";
         victorySound.play();
         applauseSound.play();
     }
 }
 
+function  checkLose(){
+    livesDiv.style.display = "block";
+    btnRstart.style.display = "flex";
+    stopGame();
+    youLose()
+}
 
 function youLose(){
     crashSound.play();
-    gameOverSound.play()
+    //gameOverSound.play()
 }
-
 
 function timer(){
     maxTime -= 1;
     if(maxTime < 0){
-        timeDiv.style.display = "block"
-        stopGame()
-        return youLose()
+       return checkLose()
     }
 }
 
