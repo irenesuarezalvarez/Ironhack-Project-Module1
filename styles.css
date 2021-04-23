@@ -16,6 +16,29 @@ height: calc(100% - 3rem);
 padding: 1.5rem;
 }
 
+#start{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.instructions{
+    background-color: rgba(255, 255, 255, 0.561);
+    border-radius: 5px;
+    padding: 15px;
+    margin: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: justify;
+}
+
+.instructions img{
+    height: 20px;
+}
+
+#goodluck{
+    height: 80px;
+}
 .end-div{
     background-color: rgba(255, 255, 255, 0.644);
     color: black;
@@ -82,6 +105,11 @@ padding: 1.5rem;
 }
 
 #img-mute{
+    top: 0;
+    right: 0;
+}
+
+.on{
     top: 0;
     right: 0;
 }

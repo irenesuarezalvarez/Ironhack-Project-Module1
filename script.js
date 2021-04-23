@@ -1,3 +1,4 @@
+const startDiv = document.getElementById('start');
 const timeDiv = document.getElementById('time-div');
 const livesDiv = document.getElementById('lives-div');
 const scoreDiv = document.getElementById('score-div');
@@ -40,6 +41,9 @@ applauseSound = new Sound("./sounds/applause.mp3");
 let crashSound;
 crashSound = new Sound("./sounds/hit.mp3");
 
+let timerSound;
+timerSound = new Sound("./sounds/timer.mp3");
+
 let gameOverSound;
 gameOverSound = new Sound("./sounds/gameOver.mp3");
 
@@ -51,10 +55,10 @@ bgMusic = new Sound("./sounds/myCorona.mp3");
 
 //Images
 const background = new Image();
-background.src = "./images_corona/bg_city.jpg";
+background.src = "./images/bg_city.jpg";
 
 const player1 = new Image();
-player1.src = "./images_corona/boy.png";
+player1.src = "./images/boy.png";
 
 
 //Buttons
@@ -87,12 +91,16 @@ function startGame(){
 }
 
 function reStartGame(){ 
+    startDiv.style.display = "none";
     timeDiv.style.display = "none";
     livesDiv.style.display = "none";
     scoreDiv.style.display = "none";
     showPoints.style.display = "none";
     btnStart.style.display = "none";
+    btnRstart.style.display = "none";
     btnMute.style.display = "block";
+    imgMute.classList.add('on');
+    imgMute.src = './images/mute.png';
     bgMusic.play()
     enemies = []
     prizes = [];
@@ -108,9 +116,16 @@ function reStartGame(){
 
 //Stop sounds TODO: make this work
 function stopSounds(){
-    bgMusic.stop()
-    crashSound.stop()
-    imgMute.src='./images/off-mute.png';
+    if(imgMute.classList.contains('on')){
+        console.log(imgMute.src)
+        imgMute.src='./images/off-mute.png';
+        bgMusic.stop()
+        imgMute.classList.remove('on');
+    }else{
+        imgMute.src = './images/mute.png';
+        bgMusic.play()
+        imgMute.classList.add('on');
+    }
 }
 
 //Function re-print Canvas
@@ -139,9 +154,9 @@ function updateCanvas(){
                     enemies.splice(idx, 1);
                     lives -= 1;
                 }else{
-                    checkLose()
+                    youLose()
+                    livesDiv.style.display = "block";
                 }
-                
             }
         }) 
     }) 
@@ -223,7 +238,7 @@ function spawnEnemies(){
             x:1,
             y:1
         } */
-        enemies.push(new Object("./images_corona/covid.png", x, y, w, h, velocity))
+        enemies.push(new Object("./images/covid.png", x, y, w, h, velocity))
 }
 
 function spawnPrizes(){
@@ -232,7 +247,7 @@ function spawnPrizes(){
     const h = 40;
     const y = chooseRandom(0, (canvas.height - h));
     const velocity = 2 
-    prizes.push(new Object("./images_corona/vac.png", x, y, w, h, velocity))
+    prizes.push(new Object("./images/vac.png", x, y, w, h, velocity))
 }
 
 
@@ -354,27 +369,29 @@ function checkGameWin(){
         stopGame()
         scoreDiv.style.display = "flex";
         btnRstart.style.display = "block";
+        showPoints.style.display = "block";
+        showPoints.innerHTML = points;
         victorySound.play();
         applauseSound.play();
     }
 }
 
-function  checkLose(){
-    livesDiv.style.display = "block";
+function  youLose(){
     btnRstart.style.display = "flex";
     stopGame();
-    youLose()
+    crashSound.play();
+    gameOverSound.play()
 }
 
-function youLose(){
-    crashSound.play();
-    //gameOverSound.play()
-}
 
 function timer(){
     maxTime -= 1;
+    if(maxTime === 3){
+        timerSound.play()
+    }
     if(maxTime < 0){
-       return checkLose()
+        timeDiv.style.display = "block";
+        return youLose()
     }
 }
 
@@ -387,9 +404,9 @@ function printData(text, x, y){
 function printLives(){
     printData(`Lives: ${lives}`, (canvas.width - 90), 25 )
 }
+
 function printScore(){
     printData(`Score: ${points}`, (canvas.width - 90), 50);
-    showPoints.innerHTML = points;  
 }
 
 function printTime(){
@@ -402,4 +419,6 @@ function printTime(){
 
 function stopTimer() {
     clearInterval(mytimer);
-  }
+}
+
+  

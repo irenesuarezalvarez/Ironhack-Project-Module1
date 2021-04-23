@@ -4,11 +4,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="styles.css">
-    <title>Game!</title>
+    <title>My Corona</title>
 </head>
 <body>
     <div id="main-div" class="main-div">
-        <button id="btn-start" class="btn">Start Game</button>
+        <div id="start">
+            <div  id="inst" class="instructions">
+                <h3>GAME INSTRUCTIONS</h3>
+                <p>Oh nooo! We are facing a global Pandemic! The Coronavirus is everywhere around the city!
+                <br>
+                Help Pablo <img src="./images/boyOne.png" alt="Main character"> to avoid it and get his    <img src="./images/vac.png" alt="Vaccine"> vaccine dose before he gets the virus <img src="./images/covid.png" alt="Virus"> !
+                <br>
+                Remember you have <b>59 seconds</b>  to get a <b>100 doses</b> to become completely inmune to Corona!
+                </p>
+                <img id="goodluck" src="./images/goodLuck.png" alt="Good Luck!">
+            </div>
+            <button id="btn-start" class="btn">Start Game</button>
+        </div>
+        
         
         <div id="score-div" class="end-div">
             <h3>Points: </h3>
@@ -27,9 +40,11 @@
 
         <button id="btn-rstart" class="btn">Re-start game</button>
 
-        <button id="btn-mute" class="btn-mute"><img id="img-mute" class="btn-mute" src="./images/mute.png" alt=""></button>
+        <button id="btn-mute" class="btn-mute"><img id="img-mute" class="btn-mute on" src="./images/mute.png" alt=""></button>
         
     </div>
- <script src="./newFriday.js"></script>
+
+    <!-- <script src="./components.js"></script> -->
+    <script src="./script.js"></script>
 </body>
 </html>
