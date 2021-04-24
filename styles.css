@@ -109,11 +109,6 @@ padding: 1.5rem;
     right: 0;
 }
 
-.on{
-    top: 0;
-    right: 0;
-}
-
 #btn-mute:hover{
     box-shadow: 10px 10px 8px #888888;
 }

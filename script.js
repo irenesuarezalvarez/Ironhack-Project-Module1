@@ -27,31 +27,17 @@ let maxTime = 59;
 let enemies = [];
 let prizes = [];
 let mytimer;
-
+let hasSound = imgMute.classList.contains('on');
 //Sounds
-let ouchSound;
-ouchSound = new Sound("./sounds/ouch.mp3");
-
-let pointSound;
-pointSound = new Sound("./sounds/point.mp3");
-
-let applauseSound;
-applauseSound = new Sound("./sounds/applause.mp3");
-
-let crashSound;
-crashSound = new Sound("./sounds/hit.mp3");
-
-let timerSound;
-timerSound = new Sound("./sounds/timer.mp3");
-
-let gameOverSound;
-gameOverSound = new Sound("./sounds/gameOver.mp3");
-
-let victorySound;
-victorySound = new Sound("./sounds/victory.mp3");
-
-let bgMusic;
-bgMusic = new Sound("./sounds/myCorona.mp3");
+let ouchSound = new Sound("./sounds/ouch.mp3");
+let pointSound = new Sound("./sounds/point.mp3");
+let applauseSound= new Sound("./sounds/applause.mp3");
+let crashSound = new Sound("./sounds/hit.mp3");
+let timerSound = new Sound("./sounds/timer.mp3");
+let gameOverSound = new Sound("./sounds/gameOver.mp3");
+let victorySound = new Sound("./sounds/victory.mp3");
+let grlPfizer = new Sound("./sounds/girlPfizer.mp3")
+let bgMusic = new Sound("./sounds/myCorona.mp3");
 
 //Images
 const background = new Image();
@@ -101,6 +87,7 @@ function reStartGame(){
     btnMute.style.display = "block";
     imgMute.classList.add('on');
     imgMute.src = './images/mute.png';
+    hasSound = imgMute.classList.contains('on');
     bgMusic.play()
     enemies = []
     prizes = [];
@@ -114,17 +101,16 @@ function reStartGame(){
     mytimer = setInterval(timer, 1000)
 }
 
-//Stop sounds TODO: make this work
+//Stop sounds
 function stopSounds(){
-    if(imgMute.classList.contains('on')){
-        console.log(imgMute.src)
-        imgMute.src='./images/off-mute.png';
-        bgMusic.stop()
-        imgMute.classList.remove('on');
-    }else{
-        imgMute.src = './images/mute.png';
+    imgMute.classList.toggle('on');
+    hasSound = imgMute.classList.contains('on');
+    if(hasSound){
+        imgMute.src='./images/mute.png';
         bgMusic.play()
-        imgMute.classList.add('on');
+    }else{
+        imgMute.src = './images/off-mute.png';
+        bgMusic.stop()
     }
 }
 
@@ -150,7 +136,9 @@ function updateCanvas(){
          enemies.forEach((enemy, idx)=>{
             if (!((player.y + player.height) < enemy.y || player.y > (enemy.y + enemy.h)|| (player.x + player.width) < enemy.x || player.x > (enemy.x + enemy.w))){
                 if(lives > 0){
-                    ouchSound.play()
+                    if(hasSound){
+                        ouchSound.play()
+                    }
                     enemies.splice(idx, 1);
                     lives -= 1;
                 }else{
@@ -165,7 +153,9 @@ function updateCanvas(){
         prize.update()
         prizes.forEach((prize, idx)=>{
             if (!((player.y + player.height) < prize.y || player.y > (prize.y + prize.h)|| (player.x + player.width) < prize.x || player.x > (prize.x + prize.w))){
-                pointSound.play()
+                if(hasSound){
+                    pointSound.play()
+                } 
                 prizes.splice(idx, 1);
                 points += 10;
                 checkGameWin()
@@ -179,7 +169,7 @@ function updateCanvas(){
 }
 
 
-function chooseRandom(min, max) { // min and max included
+function chooseRandom(min, max) { 
     return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
@@ -234,10 +224,7 @@ function spawnEnemies(){
         const w = 50;
         const h = 50;
         const y = chooseRandom(0, (canvas.height - h));
-        const velocity = 1 /* {
-            x:1,
-            y:1
-        } */
+        const velocity = 1 /* { x:1, y:1 } */
         enemies.push(new Object("./images/covid.png", x, y, w, h, velocity))
 }
 
@@ -304,59 +291,7 @@ function turnPlayer(){
     }    
 } */
 
-/* function checkCrash(object){
-    return !((player.y + player.height) < object.y || player.y > (object.y + object.h)|| (player.x + player.width) < object.x || player.x > (object.x + object.w));
-}  */
 
-/* 
-
-function score(){
-    prizes.forEach((object, idx)=>{
-        if((player.y + player.height) < object.y || player.y > (object.y + object.h)|| (player.x + player.width) < object.x || player.x > (object.x + object.w)){
-            prizes.splice(idx, 1);
-        }
-    })
-
-   /*  const getPoints = prizes.some(function (prize) {
-        return checkCrash(prize);
-    });
-
-    if(getPoints){
-        console.log('cucu');
-    } */
-   /*  if(getPoints){
-        
-        console.log('Point', points)
-        return points = points + 1;
-        
-        /*
-        points += 1;
-        console.log(points) 
-        //eliminar la vacuna
-    } 
-} */
-
-/* function checkGameOver() {
-    const crashed = enemies.some(function (enemy) {
-        return checkCrash(enemy);
-    });
-   
-    if (crashed) {
-        if(lives > 0){
-            prizes.forEach((enemy, idx)=>{
-                if (!((player.y + player.height) < enemy.y || player.y > (enemy.y + enemy.h)|| (player.x + player.width) < enemy.x || player.x > (enemy.x + enemy.w))){
-                    enemies.splice(idx, 1);
-                    lives -= 1;
-                }
-            })
-        }else{
-            stopGame();
-            //livesDiv.style.display = flex;
-        }
-        
-    }
-}
- */
 function stopGame(){
     stopTimer()
     cancelAnimationFrame(raf);
@@ -371,23 +306,30 @@ function checkGameWin(){
         btnRstart.style.display = "block";
         showPoints.style.display = "block";
         showPoints.innerHTML = points;
-        victorySound.play();
-        applauseSound.play();
+        if (hasSound){
+            victorySound.play();
+            applauseSound.play();
+            setTimeout(function(){ grlPfizer.play() }, 3500);
+        }
     }
 }
 
 function  youLose(){
     btnRstart.style.display = "flex";
     stopGame();
-    crashSound.play();
-    gameOverSound.play()
+    if(hasSound){
+        crashSound.play();
+        gameOverSound.play();
+    }
+    
 }
-
 
 function timer(){
     maxTime -= 1;
     if(maxTime === 3){
-        timerSound.play()
+        if(hasSound){
+            timerSound.play()
+        }
     }
     if(maxTime < 0){
         timeDiv.style.display = "block";
