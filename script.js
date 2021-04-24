@@ -132,7 +132,7 @@ function updateCanvas(){
     } 
     
     enemies.forEach((enemy)=>{
-        enemy.update()
+        enemy.update() //prints and increases x
          enemies.forEach((enemy, idx)=>{
             if (!((player.y + player.height) < enemy.y || player.y > (enemy.y + enemy.h)|| (player.x + player.width) < enemy.x || player.x > (enemy.x + enemy.w))){
                 if(lives > 0){
@@ -150,7 +150,7 @@ function updateCanvas(){
     }) 
 
     prizes.forEach((prize)=>{
-        prize.update()
+        prize.update() //prints and increases x
         prizes.forEach((prize, idx)=>{
             if (!((player.y + player.height) < prize.y || player.y > (prize.y + prize.h)|| (player.x + player.width) < prize.x || player.x > (prize.x + prize.w))){
                 if(hasSound){
@@ -192,32 +192,6 @@ function drawMain(img, sX, sY, sW, wH, x, y, w, h){
 function draw(img,x, y, w, h){
     ctx.drawImage(img, x, y, w, h)
 }
-
-
-//Enemies
-class Object{
-    constructor(imgsrc, x, y, w, h, velocity){
-        this.x = x;
-        this.y = y;
-        this.w = w;
-        this.h = h;
-        this.velocity = velocity;
-        this.img = new Image()
-        this.img.src = imgsrc;
-    }
-
-    draw(){
-        ctx.drawImage(this.img, this.x, this.y, this.w, this.h);
-    }
-
-    update(){
-        this.draw()
-        this.x += 1
-        /* this.x = this.x + this.velocity.x;
-        this.y = this.y +this.velocity.y */
-    }
-}
-
 
 function spawnEnemies(){
         const x = 0;
